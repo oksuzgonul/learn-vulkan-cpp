@@ -1,1 +1,2 @@
 C:\Users\oksuz\source\repos\VulkanCourseApp\Debug\VulkanCourseApp.exe
+C:\Users\oksuz\source\repos\Vulkan\LearnVulkanCpp\VulkanCourseApp\Debug\VulkanCourseApp.exe
