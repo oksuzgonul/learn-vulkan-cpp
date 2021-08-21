@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <set>
+#include <algorithm>
 
 #include "Utilities.h"
 
@@ -24,6 +25,7 @@ private:
 	GLFWwindow * window;
 
 	// Vulkan Components
+	// - Main
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debugMessenger;
 	struct {
@@ -33,6 +35,12 @@ private:
 	VkQueue graphicsQueue;
 	VkQueue presentationQueue;
 	VkSurfaceKHR surface;
+	VkSwapchainKHR swapchain;
+	std::vector<SwapchainImage> swapChainImages;
+
+	// - utility
+	VkFormat swapChainImageFormat;
+	VkExtent2D swapChainExtent;
 
 
 	// Vulkan Functions
@@ -41,6 +49,7 @@ private:
 	void createLogicalDevice();
 	void setupDebugMessenger();
 	void createSurface();
+	void createSwapChain();
 
 	// - Get Functions
 	void getPhysicalDevice();
@@ -56,6 +65,14 @@ private:
 	QueueFamilyIndices getQueueFamilies(VkPhysicalDevice device);
 	std::vector<const char*> getRequiredExtensions();
 	SwapchainDetails getSwapChainDetails(VkPhysicalDevice device);
+
+	// -- Choose Functions
+	VkSurfaceFormatKHR chooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &formats);
+	VkPresentModeKHR chooseBestPresentationMode(const std::vector<VkPresentModeKHR> &presentationModes);
+	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &surfaceCapabilities);
+
+	// -- Support Create functions
+	VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 
 	// Static debug callback function
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
