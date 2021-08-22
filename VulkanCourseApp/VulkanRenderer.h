@@ -50,6 +50,7 @@ private:
 	void setupDebugMessenger();
 	void createSurface();
 	void createSwapChain();
+	void createGraphicsPipeline();
 
 	// - Get Functions
 	void getPhysicalDevice();
@@ -73,6 +74,7 @@ private:
 
 	// -- Support Create functions
 	VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
+	VkShaderModule createShaderModule(const std::vector<char>& code);
 
 	// Static debug callback function
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
