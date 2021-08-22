@@ -37,14 +37,14 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		glfwPollEvents();
+		vulkanRenderer.draw();
 	}
 
 	vulkanRenderer.cleanup();
 
 	// Destroy GLFW window and stop GLFW
-	// glfwDestroyWindow(window);
-	// glfwTerminate();
-	// moved these two into cleanup() function
+	glfwDestroyWindow(window);
+	glfwTerminate();
 
 	return 0;
 }

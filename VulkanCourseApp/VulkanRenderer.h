@@ -18,6 +18,7 @@ public:
 	VulkanRenderer();
 
 	int init(GLFWwindow * newWindow);
+	void draw();
 	void cleanup();
 
 	~VulkanRenderer();
@@ -25,10 +26,13 @@ public:
 private:
 	GLFWwindow * window;
 
+	int currentFrame = 0;
+
 	// Vulkan Components
 	// - Main
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debugMessenger;
+	VkDebugReportCallbackEXT callback;
 	struct {
 		VkPhysicalDevice physicalDevice;
 		VkDevice logicalDevice;
@@ -37,19 +41,27 @@ private:
 	VkQueue presentationQueue;
 	VkSurfaceKHR surface;
 	VkSwapchainKHR swapchain;
+
 	std::vector<SwapchainImage> swapChainImages;
+	std::vector<VkFramebuffer> swapChainFramebuffers;
+	std::vector<VkCommandBuffer> commandBuffers;
 
 	// - Pipeline
 	VkPipeline graphicsPipeline;
 	VkPipelineLayout pipelineLayout;
 	VkRenderPass renderPass;
 
+	// - Pools
+	VkCommandPool graphicsCommandPool;
 
-
-	// - utility
+	// - Utility
 	VkFormat swapChainImageFormat;
 	VkExtent2D swapChainExtent;
 
+	// - Synchronisation
+	std::vector<VkSemaphore> imageAvailable;
+	std::vector<VkSemaphore> renderFinished;
+	std::vector<VkFence> drawFences;
 
 	// Vulkan Functions
 	// - Create Functions
@@ -60,6 +72,13 @@ private:
 	void createSwapChain();
 	void createRenderPass();
 	void createGraphicsPipeline();
+	void createFramebuffers();
+	void createCommandPool();
+	void createCommandBuffers();
+	void createSynchronisation();
+
+	// - Record Functions
+	void recordCommands();
 
 	// - Get Functions
 	void getPhysicalDevice();
@@ -74,17 +93,17 @@ private:
 	// -- Getter Functions
 	QueueFamilyIndices getQueueFamilies(VkPhysicalDevice device);
 	std::vector<const char*> getRequiredExtensions();
-	SwapchainDetails getSwapChainDetails(VkPhysicalDevice device);
+	SwapChainDetails getSwapChainDetails(VkPhysicalDevice device);
 
 	// -- Choose Functions
 	VkSurfaceFormatKHR chooseBestSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &formats);
-	VkPresentModeKHR chooseBestPresentationMode(const std::vector<VkPresentModeKHR> &presentationModes);
+	VkPresentModeKHR chooseBestPresentationMode(const std::vector<VkPresentModeKHR> presentationModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &surfaceCapabilities);
 
-	// -- Support Create functions
+	// -- Create Functions
 	VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
-	VkShaderModule createShaderModule(const std::vector<char>& code);
-
+	VkShaderModule createShaderModule(const std::vector<char> &code);
+	
 	// Static debug callback function
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -94,7 +113,7 @@ private:
 	// Proxy function to call vkCreateDebugUtilsMessengerEXT function since it needs to be looked 
 	// up via vkGetInstanceProcAddr. This is because it is an extension function and it is not automatically loaded
 	VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-			const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
+		const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
 
 	// Another proxy function to clean up vkDebugUtilsMessengerEXT
 	static void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
