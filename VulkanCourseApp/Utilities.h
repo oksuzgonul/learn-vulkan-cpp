@@ -1,11 +1,16 @@
 #pragma once
 
 #include <fstream>
+#include <glm.hpp>
 
 const int MAX_FRAME_DRAWS = 3;
 
 const std::vector<const char *> deviceExtensions = {
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
+struct Vertex {
+	glm::vec3 pos; // vertex position (x, y, z)
 };
 
 // Indices (locations) of Queue Families (if they exist at all)

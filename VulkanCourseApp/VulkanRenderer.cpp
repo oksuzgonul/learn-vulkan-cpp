@@ -1,15 +1,5 @@
 #include "VulkanRenderer.h"
 
-const std::vector<const char*> validationLayers = {
-	"VK_LAYER_KHRONOS_validation"
-};
-
-#ifdef NDEBUG
-const bool enableValidationLayers = false;
-#else
-const bool enableValidationLayers = true;
-#endif
-
 VulkanRenderer::VulkanRenderer()
 {
 }
@@ -74,7 +64,6 @@ void VulkanRenderer::draw()
 	{
 		throw std::runtime_error("Failed to submit Command Buffer to Queue!");
 	}
-
 
 	// -- PRESENT RENDERED IMAGE TO SCREEN --
 	VkPresentInfoKHR presentInfo = {};
@@ -447,8 +436,21 @@ void VulkanRenderer::createGraphicsPipeline()
 	// Graphics Pipeline creation info requires array of shader stage creates
 	VkPipelineShaderStageCreateInfo shaderStages[] = { vertexShaderCreateInfo, fragmentShaderCreateInfo };
 
+	// How the data for a single vertex (including info such as position, color, texture coords, normals, etc) is as a whole
+	VkVertexInputBindingDescription bindingDescription;
+	bindingDescription.binding = 0;									// can bind multiple streams of data, this defines which one
+	bindingDescription.stride = sizeof(Vertex);						// size of a single vertex object
+	bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;		// how to move between data after each vertex. VK_VERTEX_INPUT_RATE_VERTEX move on to the next vertex
+																	// VK_VERTEX_INPUT_RATE_INSTANCE: move to a vertex for the next instance
+	// how the data for an attribute is defined within a vertex
+	std::array<VkVertexInputAttributeDescription, 1> attributeDescriptions;
 
-	// -- VERTEX INPUT (TODO: Put in vertex descriptions when resources created) --
+	// position attribute
+	attributeDescriptions[0].binding = 0;				// which binding the data is at (should be same as above)
+
+	
+
+	// -- VERTEX INPUT --
 	VkPipelineVertexInputStateCreateInfo vertexInputCreateInfo = {};
 	vertexInputCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	vertexInputCreateInfo.vertexBindingDescriptionCount = 0;
