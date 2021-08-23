@@ -11,6 +11,7 @@ const std::vector<const char *> deviceExtensions = {
 
 struct Vertex {
 	glm::vec3 pos; // vertex position (x, y, z)
+	glm::vec3 col;
 };
 
 // Indices (locations) of Queue Families (if they exist at all)

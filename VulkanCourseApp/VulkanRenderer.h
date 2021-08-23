@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <array>
 
+#include "Mesh.h"
 #include "Utilities.h"
 
 const std::vector<const char*> validationLayers = {
@@ -37,6 +38,9 @@ private:
 	GLFWwindow * window;
 
 	int currentFrame = 0;
+
+	//Scene Objects
+	Mesh firstMesh;
 
 	// Vulkan Components
 	// - Main
