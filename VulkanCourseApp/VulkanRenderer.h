@@ -31,7 +31,7 @@ class VulkanRenderer
 public:
 	VulkanRenderer();
 
-	int init(GLFWwindow* newWindow);
+	int init(GLFWwindow * newWindow);
 
 	void updateModel(int modelId, glm::mat4 newModel);
 
@@ -42,7 +42,7 @@ public:
 	~VulkanRenderer();
 
 private:
-	GLFWwindow* window;
+	GLFWwindow * window;
 
 	int currentFrame = 0;
 
@@ -75,6 +75,7 @@ private:
 
 	// - Descriptors
 	VkDescriptorSetLayout descriptorSetLayout;
+	VkPushConstantRange pushConstantRange;
 
 	VkDescriptorPool descriptorPool;
 	std::vector<VkDescriptorSet> descriptorSets;
@@ -85,9 +86,9 @@ private:
 	std::vector<VkBuffer> modelDUniformBuffer;
 	std::vector<VkDeviceMemory> modelDUniformBufferMemory;
 
-	VkDeviceSize minUniformBufferOffset;
-	size_t modelUniformAlignment;
-	UboModel* modelTransferSpace;
+	//VkDeviceSize minUniformBufferOffset;
+	//size_t modelUniformAlignment;
+	//UboModel * modelTransferSpace;
 
 	// - Pipeline
 	VkPipeline graphicsPipeline;
@@ -115,6 +116,7 @@ private:
 	void createSwapChain();
 	void createRenderPass();
 	void createDescriptorSetLayout();
+	void createPushConstantRange();
 	void createGraphicsPipeline();
 	void createFramebuffers();
 	void createCommandPool();
@@ -128,7 +130,7 @@ private:
 	void updateUniformBuffers(uint32_t imageIndex);
 
 	// - Record Functions
-	void recordCommands();
+	void recordCommands(uint32_t currentImage);
 
 	// - Get Functions
 	void getPhysicalDevice();
@@ -140,8 +142,9 @@ private:
 	// -- Checker Functions
 	bool checkInstanceExtensionSupport(std::vector<const char*> * checkExtensions);
 	bool checkDeviceExtensionSupport(VkPhysicalDevice device);
-	bool checkDeviceSuitable(VkPhysicalDevice device);
+
 	bool checkValidationLayerSupport();
+	bool checkDeviceSuitable(VkPhysicalDevice device);
 
 	// -- Getter Functions
 	QueueFamilyIndices getQueueFamilies(VkPhysicalDevice device);
