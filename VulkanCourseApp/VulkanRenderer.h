@@ -33,7 +33,7 @@ public:
 
 	int init(GLFWwindow* newWindow);
 
-	void updateModel(glm::mat4 newModel);
+	void updateModel(int modelId, glm::mat4 newModel);
 
 
 	void draw();
@@ -50,11 +50,10 @@ private:
 	std::vector<Mesh> meshList;
 
 	// Scene settings
-	struct MVP {
+	struct UboViewProjection {
 		glm::mat4 projection;
 		glm::mat4 view;
-		glm::mat4 model;
-	} mvp;
+	} uboViewProjection;
 
 	// Vulkan Components
 	// - Main
@@ -80,8 +79,15 @@ private:
 	VkDescriptorPool descriptorPool;
 	std::vector<VkDescriptorSet> descriptorSets;
 
-	std::vector<VkBuffer> uniformBuffer;
-	std::vector<VkDeviceMemory> uniformBufferMemory;
+	std::vector<VkBuffer> vpUniformBuffer;
+	std::vector<VkDeviceMemory> vpUniformBufferMemory;
+
+	std::vector<VkBuffer> modelDUniformBuffer;
+	std::vector<VkDeviceMemory> modelDUniformBufferMemory;
+
+	VkDeviceSize minUniformBufferOffset;
+	size_t modelUniformAlignment;
+	UboModel* modelTransferSpace;
 
 	// - Pipeline
 	VkPipeline graphicsPipeline;
@@ -119,13 +125,16 @@ private:
 	void createDescriptorPool();
 	void createDescriptorSets();
 
-	void updateUniformBuffer(uint32_t imageIndex);
+	void updateUniformBuffers(uint32_t imageIndex);
 
 	// - Record Functions
 	void recordCommands();
 
 	// - Get Functions
 	void getPhysicalDevice();
+
+	// - Allocate Funcitions
+	void allocateDynamicBufferTransferSpace();
 
 	// - Support Functions
 	// -- Checker Functions
