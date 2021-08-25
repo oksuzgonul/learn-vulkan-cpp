@@ -5,7 +5,8 @@ Mesh::Mesh()
 
 }
 
-Mesh::Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue, VkCommandPool transferCommandPool, std::vector<Vertex>* vertices, std::vector<uint32_t>* indices)
+Mesh::Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue transferQueue, 
+	VkCommandPool transferCommandPool, std::vector<Vertex>* vertices, std::vector<uint32_t>* indices, int newTexId)
 {
 	vertexCount = vertices->size();
 	indexCount = indices->size();
@@ -15,6 +16,7 @@ Mesh::Mesh(VkPhysicalDevice newPhysicalDevice, VkDevice newDevice, VkQueue trans
 	createIndexBuffer(transferQueue, transferCommandPool, indices);
 
 	model.model = glm::mat4(1.0f);
+	texId = newTexId;
 }
 
 void Mesh::setModel(glm::mat4 newModel)
@@ -25,6 +27,16 @@ void Mesh::setModel(glm::mat4 newModel)
 Model Mesh::getModel()
 {
 	return model;
+}
+
+int Mesh::getTexId()
+{
+	return texId;
+}
+
+void Mesh::setTexId(int newTexId)
+{
+	texId = newTexId;
 }
 
 int Mesh::getVertexCount()
