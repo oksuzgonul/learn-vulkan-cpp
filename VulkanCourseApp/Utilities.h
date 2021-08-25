@@ -8,7 +8,7 @@
 #include <glm.hpp>
 
 const int MAX_FRAME_DRAWS = 2;
-const int MAX_OBJECTS = 2;
+const int MAX_OBJECTS = 200;
 
 const std::vector<const char *> deviceExtensions = {
 	VK_KHR_SWAPCHAIN_EXTENSION_NAME
@@ -16,7 +16,8 @@ const std::vector<const char *> deviceExtensions = {
 
 struct Vertex {
 	glm::vec3 pos; // vertex position (x, y, z)
-	glm::vec3 col;
+	glm::vec3 col; // vertex color (r, g, b, a)
+	glm::vec2 tex; // texture coords (u, v)
 };
 
 // Indices (locations) of Queue Families (if they exist at all)
