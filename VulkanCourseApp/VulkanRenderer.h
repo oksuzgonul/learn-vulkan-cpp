@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <array>
 
+#include "stb_image.h"
+
 #include "Mesh.h"
 #include "Utilities.h"
 
@@ -94,6 +96,10 @@ private:
 	//size_t modelUniformAlignment;
 	//UboModel * modelTransferSpace;
 
+	// -- Assets
+	std::vector<VkImage> textureImages;
+	std::vector<VkDeviceMemory> textureImageMemory;
+
 	// - Pipeline
 	VkPipeline graphicsPipeline;
 	VkPipelineLayout pipelineLayout;
@@ -167,6 +173,12 @@ private:
 		VkMemoryPropertyFlags propFlags, VkDeviceMemory *imageMemory);
 	VkImageView createImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 	VkShaderModule createShaderModule(const std::vector<char> &code);
+
+	int createTextureImage(std::string fileName);
+	int createTexture(std::string fileName);
+
+	// -- Loader Functions
+	stbi_uc* loadTextureFile(std::string fileName, int* width, int* height, VkDeviceSize* imageSize);
 	
 	// Static debug callback function
 	static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
